@@ -28,13 +28,13 @@ namespace RobotSimulator.Service.Domain
     internal class Robot : IRobot
     {
         public RobotPosition? Position { get; private set; }
-        public bool Placed { get; private set; }
+
+        public bool Placed => Position!=null;
 
         public Robot() {}
 
         public void Place(RobotPosition position)
         {
-            Placed = true;
             Position = position;
         }
         public void Move()
