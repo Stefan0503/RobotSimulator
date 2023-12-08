@@ -1,4 +1,5 @@
 using RobotSimulator.Service;
+using RobotSimulator.Service.Constants;
 using RobotSimulator.Service.Responses;
 
 namespace RobotSimulator.Tests
@@ -61,7 +62,7 @@ namespace RobotSimulator.Tests
             _app.Run(new string[] { });
 
             _simulator.Verify(x => x.Place(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never());
-            Assert.Contains("Invalid X, Y coordinates for PLACE command", output.ToString());
+            Assert.Contains(ValidationMessageConstants.InvalidCoordinates, output.ToString());
         }
 
         [Fact]
@@ -130,6 +131,37 @@ namespace RobotSimulator.Tests
             Assert.Contains("Left Command processed", output.ToString());
         }
 
+        [Fact]
+        public void App_Run_File_InvalidFile_Display_Message()
+        {
+            var output = new StringWriter();
+            Console.SetOut(output);
 
+            _app.Run(new string[] { "testcommands.txt1" });
+
+            Assert.Contains("Not a .txt file. Please try again.", output.ToString());
+        }
+
+        [Fact]
+        public void App_Run_File_Display_Messages()
+        {
+            var invalidPlaceResponse = new CommandResponse();
+            invalidPlaceResponse.Messages.Add(ValidationMessageConstants.InvalidPlacement);
+
+            var reportResponse = new CommandResponse();
+            reportResponse.Messages.Add("1,1,EAST");
+
+            _simulator.Setup(x => x.Place(5, It.IsAny<int>(), It.IsAny<string>())).Returns(invalidPlaceResponse);
+            _simulator.Setup(x => x.Report()).Returns(reportResponse);
+
+            var output = new StringWriter();
+            Console.SetOut(output);
+
+            _app.Run(new string[] {"testcommands.txt" });
+
+            Assert.Contains("1,1,EAST", output.ToString());
+            Assert.Contains(ValidationMessageConstants.InvalidPlacement, output.ToString());
+            Assert.Contains(ValidationMessageConstants.InvalidCoordinates, output.ToString());
+        }
     }
 }

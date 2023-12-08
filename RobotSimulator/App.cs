@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RobotSimulator.Service;
+using RobotSimulator.Service.Constants;
 using RobotSimulator.Service.Responses;
 
 namespace RobotSimulator
@@ -148,7 +149,7 @@ namespace RobotSimulator
 
             if (!validEast || !validNorth) {
                 response = new CommandResponse();
-                response.Messages.Add("Invalid X, Y coordinates for PLACE command");
+                response.Messages.Add(ValidationMessageConstants.InvalidCoordinates);
                 return response;
             };
 

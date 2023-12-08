@@ -7,5 +7,6 @@
         public const string InvalidPlacement = "Invalid Robot placement. " + CommandIgnored;
         public const string RobotNotPlaced = "Cannot process command until Robot is placed. " + CommandIgnored;
         public const string RobotOutOfBounds = "Cannot process command as Robot will be out of bounds. " + CommandIgnored;
+        public const string InvalidCoordinates = "Invalid X, Y coordinates for PLACE command.";
     }
 }
